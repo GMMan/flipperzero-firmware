@@ -759,8 +759,10 @@ void mf_ul_prepare_emulation(MfUltralightEmulator* emulator, MfUltralightData* d
     if(data->type >= MfUltralightTypeNTAG213 && data->type < MfUltralightTypeNTAGI2C1K) {
         uint16_t pwd_page = (data->data_size / 4) - 2;
         emulator->auth_data = (MfUltralightAuth*)&data->data[pwd_page * 4];
+        memset(&emulator->auth_attempt, 0, sizeof(MfUltralightAuth));
     } else if(data->type >= MfUltralightTypeNTAGI2CPlus1K) {
         emulator->auth_data = (MfUltralightAuth*)&data->data[229 * 4];
+        memset(&emulator->auth_attempt, 0, sizeof(MfUltralightAuth));
     }
 }
 
@@ -999,6 +1001,9 @@ bool mf_ul_prepare_emulation_response(
         if(emulator->data.type >= MfUltralightTypeNTAG213 &&
            emulator->data.type != MfUltralightTypeNTAGI2C1K &&
            emulator->data.type != MfUltralightTypeNTAGI2C2K) {
+            memcpy(emulator->auth_attempt.pwd, &buff_rx[1], sizeof(emulator->auth_attempt.pwd));
+            emulator->auth_attempted = true;
+
             if(memcmp(&buff_rx[1], emulator->auth_data->pwd, 4) == 0) {
                 buff_tx[0] = emulator->auth_data->pack.raw[0];
                 buff_tx[1] = emulator->auth_data->pack.raw[1];

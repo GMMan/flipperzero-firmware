@@ -15,6 +15,7 @@ struct NfcWorker {
 
     NfcWorkerCallback callback;
     void* context;
+    void* extra_context; // HACK: pass metadata from emulation
 
     NfcWorkerState state;
 };

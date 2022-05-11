@@ -336,6 +336,15 @@ void nfc_worker_emulate_mifare_ul(NfcWorker* nfc_worker) {
             }
             emulator.data_changed = false;
         }
+        // Check if there was an auth attempt
+        if(emulator.auth_attempted) {
+            nfc_worker->extra_context = &emulator.auth_attempt;
+            if(nfc_worker->callback) {
+                nfc_worker->callback(NfcWorkerEventPwdAuth, nfc_worker->context);
+            }
+            emulator.auth_attempted = false;
+            nfc_worker->extra_context = NULL;
+        }
     }
 }
 
@@ -707,4 +716,8 @@ void nfc_worker_read_mifare_desfire(NfcWorker* nfc_worker) {
         }
         break;
     }
+}
+
+void* nfc_worker_get_extra_context(NfcWorker* nfc_worker) {
+    return nfc_worker->extra_context;
 }

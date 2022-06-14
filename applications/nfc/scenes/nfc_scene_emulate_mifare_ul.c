@@ -18,10 +18,10 @@ void nfc_emulate_mifare_ul_worker_callback(NfcWorkerEvent event, void* context) 
             nfc_text_store_set(
                 nfc,
                 "AUTH: %02x %02x %02x %02x",
-                auth->pwd[0],
-                auth->pwd[1],
-                auth->pwd[2],
-                auth->pwd[3]);
+                auth->pwd.raw[0],
+                auth->pwd.raw[1],
+                auth->pwd.raw[2],
+                auth->pwd.raw[3]);
             // HACK: force viewport update
             view_port_update(nfc->view_dispatcher->view_port);
         }

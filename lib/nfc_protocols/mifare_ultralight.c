@@ -1483,7 +1483,10 @@ bool mf_ul_prepare_emulation_response(
             }
         } else if(cmd == MF_UL_AUTH) {
             if(emulator->supported_features & MfUltralightSupportAuth) {
-                memcpy(emulator->auth_attempt.pwd, &buff_rx[1], sizeof(emulator->auth_attempt.pwd));
+                memcpy(
+                    emulator->auth_attempt.pwd.raw,
+                    &buff_rx[1],
+                    sizeof(emulator->auth_attempt.pwd));
                 emulator->auth_attempted = true;
 
                 if(buff_rx_len == (1 + 4) * 8) {

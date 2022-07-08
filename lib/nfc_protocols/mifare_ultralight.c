@@ -1494,7 +1494,7 @@ bool mf_ul_prepare_emulation_response(
                     memcpy(
                         emulator->auth_attempt.pwd.raw,
                         &buff_rx[1],
-                        sizeof(emulator->auth_attempt.pwd));
+                        sizeof(emulator->auth_attempt.pwd.raw));
                     emulator->auth_attempted = true;
 
                     uint16_t scaled_authlim = mf_ultralight_calc_auth_count(&emulator->data);

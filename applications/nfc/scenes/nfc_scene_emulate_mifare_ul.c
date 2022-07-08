@@ -60,7 +60,7 @@ void nfc_scene_emulate_mifare_ul_widget_config(Nfc* nfc, bool auth_attempted) {
     widget_reset(widget);
 
     widget_add_icon_element(widget, 0, 3, &I_RFIDDolphinSend_97x61);
-    widget_add_string_element(
+    widget_add_string_multiline_element(
         widget, 56, 31, AlignLeft, AlignTop, FontPrimary, "Emulating\nMf Ultralight");
 
     if(auth_attempted) {

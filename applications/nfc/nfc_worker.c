@@ -335,6 +335,7 @@ void nfc_worker_emulate_mifare_ul(NfcWorker* nfc_worker) {
             mf_ul_prepare_emulation_response,
             &emulator,
             5000);
+        mf_ul_finish_emulation(&emulator);
         // Check if there was an auth attempt
         if(emulator.auth_attempted) {
             nfc_worker->event_data = &emulator.auth_attempt;

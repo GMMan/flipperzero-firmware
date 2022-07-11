@@ -26,8 +26,11 @@
 #define MF_UL_NAK_INVALID_ARGUMENT (0x0)
 #define MF_UL_NAK_AUTHLIM_REACHED (0x4)
 
+#define MF_UL_NTAG203_COUNTER_PAGE (41)
+
 typedef enum {
     MfUltralightTypeUnknown,
+    MfUltralightTypeNTAG203,
     MfUltralightTypeUL11,
     MfUltralightTypeUL21,
     MfUltralightTypeNTAG213,
@@ -58,6 +61,8 @@ typedef enum {
     MfUltralightSupportSingleCounter = 1 << 10,
     // ASCII mirror is not a command, but handy to have as a flag
     MfUltralightSupportAsciiMirror = 1 << 11,
+    // NTAG203 counter that's in memory rather than through a command
+    MfUltralightSupportCounterInMemory = 1 << 12,
 } MfUltralightFeatures;
 
 typedef enum {
@@ -175,6 +180,11 @@ bool mf_ultralight_read_version(
     MfUltralightReader* reader,
     MfUltralightData* data);
 
+bool mf_ultralight_read_pages_direct(
+    FuriHalNfcTxRxContext* tx_rx,
+    uint8_t start_index,
+    uint8_t* data);
+
 bool mf_ultralight_read_pages(
     FuriHalNfcTxRxContext* tx_rx,
     MfUltralightReader* reader,
@@ -199,6 +209,8 @@ bool mf_ul_read_card(
 void mf_ul_reset_emulation(MfUltralightEmulator* emulator, bool is_power_cycle);
 
 void mf_ul_prepare_emulation(MfUltralightEmulator* emulator, MfUltralightData* data);
+
+void mf_ul_finish_emulation(MfUltralightEmulator* emulator);
 
 bool mf_ul_prepare_emulation_response(
     uint8_t* buff_rx,

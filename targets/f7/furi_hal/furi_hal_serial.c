@@ -623,6 +623,7 @@ void furi_hal_serial_set_irda_mode(FuriHalSerialHandle* handle, uint32_t enable)
                 // - SCEN: OK since unused
                 // - HDSEL: OK since unused
                 LL_USART_ConfigIrdaMode(USART1);
+                LL_USART_SetIrdaPrescaler(USART1, 1);
             } else {
                 LL_USART_ConfigAsyncMode(USART1);
             }

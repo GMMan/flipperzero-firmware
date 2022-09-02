@@ -605,6 +605,32 @@ void furi_hal_serial_set_br(FuriHalSerialHandle* handle, uint32_t baud) {
     }
 }
 
+void furi_hal_serial_set_irda_mode(FuriHalSerialHandle* handle, uint32_t enable) {
+    furi_check(handle);
+    if(handle->id == FuriHalSerialIdUsart) {
+        // Note: there is a IrDA driver in STM32CubeWB, but most of the init here is fine
+
+        if(LL_USART_IsEnabled(USART1)) {
+            // Wait for transfer complete flag
+            while(!LL_USART_IsActiveFlag_TC(USART1))
+                ;
+            LL_USART_Disable(USART1);
+            if(enable) {
+                // Will be unset:
+                // - LINEN: OK since unused
+                // - STOP -> 1 stop bit: OK since constant
+                // - CLKEN: OK since unused
+                // - SCEN: OK since unused
+                // - HDSEL: OK since unused
+                LL_USART_ConfigIrdaMode(USART1);
+            } else {
+                LL_USART_ConfigAsyncMode(USART1);
+            }
+            LL_USART_Enable(USART1);
+        }
+    }
+}
+
 void furi_hal_serial_deinit(FuriHalSerialHandle* handle) {
     furi_check(handle);
     furi_hal_serial_async_rx_configure(handle, NULL, NULL);

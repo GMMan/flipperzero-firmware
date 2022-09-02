@@ -12,6 +12,7 @@ typedef struct {
     uint8_t baudrate_mode;
     uint32_t baudrate;
     uint8_t software_de_re;
+    bool irda_mode_enable;
 } UsbUartConfig;
 
 typedef struct {

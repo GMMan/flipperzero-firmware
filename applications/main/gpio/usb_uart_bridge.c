@@ -172,6 +172,10 @@ static void usb_uart_update_ctrl_lines(UsbUartBridge* usb_uart) {
     }
 }
 
+static void usb_uart_set_irda_mode_enable(UsbUartBridge* usb_uart, bool enable) {
+    furi_hal_serial_set_irda_mode(usb_uart->serial_handle, enable);
+}
+
 static int32_t usb_uart_worker(void* context) {
     UsbUartBridge* usb_uart = (UsbUartBridge*)context;
 
@@ -188,6 +192,7 @@ static int32_t usb_uart_worker(void* context) {
     usb_uart_vcp_init(usb_uart, usb_uart->cfg.vcp_ch);
     usb_uart_serial_init(usb_uart, usb_uart->cfg.uart_ch);
     usb_uart_set_baudrate(usb_uart, usb_uart->cfg.baudrate);
+    usb_uart_set_irda_mode_enable(usb_uart, usb_uart->cfg.irda_mode_enable);
     if(usb_uart->cfg.flow_pins != 0) {
         furi_assert((size_t)(usb_uart->cfg.flow_pins - 1) < COUNT_OF(flow_pins));
         furi_hal_gpio_init_simple(
@@ -277,6 +282,10 @@ static int32_t usb_uart_worker(void* context) {
                     furi_hal_gpio_init(
                         USB_USART_DE_RE_PIN, GpioModeAnalog, GpioPullNo, GpioSpeedLow);
                 }
+            }
+            if(usb_uart->cfg.irda_mode_enable != usb_uart->cfg_new.irda_mode_enable) {
+                usb_uart_set_irda_mode_enable(usb_uart, usb_uart->cfg_new.irda_mode_enable);
+                usb_uart->cfg.irda_mode_enable = usb_uart->cfg_new.irda_mode_enable;
             }
             api_lock_unlock(usb_uart->cfg_lock);
         }

@@ -1897,6 +1897,18 @@ NfcCommand mf_classic_poller_handler_nested_controller(MfClassicPoller* instance
             dict_attack_ctx->nested_phase = MfClassicNestedPhaseDictAttack;
         }
     }
+    if(dict_attack_ctx->reuse_key_sector == instance->sectors_total) {
+        // Reset target sector to first sector whose key has not been found
+        for(dict_attack_ctx->reuse_key_sector = 0;
+            dict_attack_ctx->reuse_key_sector < instance->sectors_total &&
+            mf_classic_nested_is_target_key_found(instance, true);
+            dict_attack_ctx->reuse_key_sector++)
+            ;
+        // Reset to sane value just in case we happen to have all of the keys
+        if(dict_attack_ctx->reuse_key_sector == instance->sectors_total) {
+            dict_attack_ctx->reuse_key_sector = 0;
+        }
+    }
     if((dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttack ||
         dict_attack_ctx->nested_phase == MfClassicNestedPhaseDictAttackResume) &&
        (dict_attack_ctx->nested_target_key < dict_target_key_max)) {

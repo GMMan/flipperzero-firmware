@@ -28,6 +28,7 @@ static const uint32_t baudrate_list[] = {
     921600,
 };
 static const char* software_de_re[] = {"None", "4"};
+static const char* en_dis[] = {"Disabled", "Enabled"};
 
 bool gpio_scene_usb_uart_cfg_on_event(void* context, SceneManagerEvent event) {
     GpioApp* app = context;
@@ -126,6 +127,17 @@ static void line_baudrate_cb(VariableItem* item) {
     view_dispatcher_send_custom_event(app->view_dispatcher, GpioUsbUartEventConfigSet);
 }
 
+static void line_sir_endec_cb(VariableItem* item) {
+    GpioApp* app = variable_item_get_context(item);
+    furi_assert(app);
+    uint8_t index = variable_item_get_current_value_index(item);
+
+    variable_item_set_current_value_text(item, en_dis[index]);
+
+    app->usb_uart_cfg->irda_mode_enable = !!index;
+    view_dispatcher_send_custom_event(app->view_dispatcher, GpioUsbUartEventConfigSet);
+}
+
 void gpio_scene_usb_uart_cfg_on_enter(void* context) {
     GpioApp* app = context;
     furi_assert(app);
@@ -171,6 +183,11 @@ void gpio_scene_usb_uart_cfg_on_enter(void* context) {
         var_item_list, "DE/RE Pin", COUNT_OF(software_de_re), line_software_de_re_cb, app);
     variable_item_set_current_value_index(item, app->usb_uart_cfg->software_de_re);
     variable_item_set_current_value_text(item, software_de_re[app->usb_uart_cfg->software_de_re]);
+
+    item = variable_item_list_add(var_item_list, "IrDA Mode", 2, line_sir_endec_cb, app);
+    variable_item_set_current_value_index(item, app->usb_uart_cfg->irda_mode_enable ? 1 : 0);
+    variable_item_set_current_value_text(
+        item, en_dis[app->usb_uart_cfg->irda_mode_enable ? 1 : 0]);
 
     variable_item_list_set_selected_item(
         var_item_list, scene_manager_get_scene_state(app->scene_manager, GpioAppViewUsbUartCfg));

@@ -64,6 +64,14 @@ bool furi_hal_serial_is_baud_rate_supported(FuriHalSerialHandle* handle, uint32_
  */
 void furi_hal_serial_set_br(FuriHalSerialHandle* handle, uint32_t baud);
 
+/**
+ * Enable or disable UART IrDA mode
+ * Enables or disables UART IrDA mode (only valid for USART1)
+ * @param      handle  Serial handle
+ * @param      enable  whether IrDA mode is enabled
+ */
+void furi_hal_serial_set_irda_mode(FuriHalSerialHandle* handle, uint32_t enable);
+
 /** Transmits data in semi-blocking mode
  *
  * Fills transmission pipe with data, returns as soon as all bytes from buffer

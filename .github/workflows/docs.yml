@@ -56,7 +56,7 @@ jobs:
           python3 scripts/get_env.py "--event_file=${{ github.event_path }}" "--type=$TYPE"
 
       - name: 'Generate documentation'
-        uses: mattnotmitt/doxygen-action@edge
+        uses: mattnotmitt/doxygen-action@1.12.0
         env:
           DOXY_SRC_ROOT: "${{ github.workspace }}"
           DOXY_CONFIG_DIR: "${{ github.workspace }}/documentation/doxygen"

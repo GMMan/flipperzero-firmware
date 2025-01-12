@@ -245,7 +245,7 @@ MfPlusError mf_plus_version_parse(MfPlusVersion* data, const BitBuffer* buf) {
     } else if(
         bit_buffer_get_size_bytes(buf) == 8 &&
         bit_buffer_get_byte(buf, 0) == MF_PLUS_STATUS_ADDITIONAL_FRAME) {
-        // HACK: There are supposed to be three parts to the GetVersion command,
+        // HACK(-nofl): There are supposed to be three parts to the GetVersion command,
         // with the second and third parts fetched by sending the AdditionalFrame
         // command. I don't know whether the entire MIFARE Plus line uses status as
         // the first byte, so let's just assume we only have the first part of

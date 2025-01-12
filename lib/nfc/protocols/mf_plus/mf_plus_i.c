@@ -67,11 +67,11 @@ MfPlusError mf_plus_get_type_from_version(
         if(iso14443_4a_data->iso14443_3a_data->sak == 0x20) {
             // Mifare Plus EV1/2 SL3
             mf_plus_data->security_level = MfPlusSecurityLevel3;
-            FURI_LOG_D(TAG, "Miare Plus EV1/2 SL3");
+            FURI_LOG_D(TAG, "Mifare Plus EV1/2 SL3");
         } else {
             // Mifare Plus EV1/2 SL1
             mf_plus_data->security_level = MfPlusSecurityLevel1;
-            FURI_LOG_D(TAG, "Miare Plus EV1/2 SL1");
+            FURI_LOG_D(TAG, "Mifare Plus EV1/2 SL1");
         }
     }
 
